@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kritinelavelli.longtextapplication.MainActivity">
+
+    <RadioGroup
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+    <RadioButton
+    android:id="@+id/leftThumb"
+    android:layout_width="wrap_content"
+    android:layout_height="100dp"
+    android:layout_weight="1"
+    android:text="Left Thumb"
+    android:onClick="onRadioButtonClicked"/>
+    <RadioButton
+    android:id="@+id/leftIndex"
+    android:layout_width="wrap_content"
+    android:layout_height="100dp"
+    android:layout_weight="1"
+    android:text="Left Index"
+    android:onClick="onRadioButtonClicked"/>
+
+    <RadioButton
+    android:id="@+id/rightThumb"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:checked="true"
+    android:onClick="onRadioButtonClicked"
+    android:text="Right Thumb" />
+
+    <RadioButton
+    android:id="@+id/rightIndex"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:text="Right Index"
+    android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="30sp"
+            android:text="@string/last_question"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </ScrollView>
+
+</android.widget.LinearLayout>

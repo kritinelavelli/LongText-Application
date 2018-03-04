@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "811894833624",
+    "firebase_url": "https://longtextapplication.firebaseio.com",
+    "project_id": "longtextapplication",
+    "storage_bucket": "longtextapplication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811894833624:android:84a1a45600c46bca",
+        "android_client_info": {
+          "package_name": "com.kritinelavelli.longtextapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "811894833624-94al3p0qcqd9n8u27smfg1n3149vpc7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kritinelavelli.longtextapplication",
+            "certificate_hash": "5c737554305cc977147e2c6677edb71fa78d4abe"
+          }
+        },
+        {
+          "client_id": "811894833624-i5jsnsk96l1lm4ht87fs6hm0uo8gsi7n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlofilbOIs0QB8QHl6QTDSD-D-cj0oZIk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "811894833624-i5jsnsk96l1lm4ht87fs6hm0uo8gsi7n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
