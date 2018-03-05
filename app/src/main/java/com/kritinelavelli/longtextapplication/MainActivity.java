@@ -3,12 +3,15 @@ package com.kritinelavelli.longtextapplication;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-    private static class swipe{
+    public static class swipe{
         public point start;
         public int width;
         public int height;
@@ -62,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference myRef;
     int uniqueID;
 
-    private View textView;
+    RadioGroup group;
+    private View scrollView;
+    private TextView textView;
     private int numberOfPoints;
     Toast toast;
 
@@ -71,8 +76,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = findViewById(R.id.scroll);
-        textView.setOnTouchListener(myOnTouchListener());
+        scrollView = findViewById(R.id.scroll);
+        group = findViewById(R.id.group);
+        textView = findViewById(R.id.indicator);
+        scrollView.setOnTouchListener(myOnTouchListener());
 
         Context context = getApplicationContext();
         CharSequence text = "Hello toast!";
@@ -92,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             // Get Post object and use the values to update the UI
-            uniqueID = dataSnapshot.getValue(int.class) -1;
-            myRef.child("uniqueID").setValue(uniqueID+1);
+            uniqueID = dataSnapshot.getValue(int.class) -1 ;
+            //myRef.child("uniqueID").setValue(uniqueID+1);
 
             // ...
         }
@@ -137,15 +144,15 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                view.onTouchEvent(event);
 
+                view.onTouchEvent(event);
                 Context context = getApplicationContext();
                 numberOfPoints++;
 
-                float x = event.getRawX();
-                float y = event.getRawY();
-//                float x = view.getX()+event.getX();
-//                float y = view.getY()+event.getY();
+//                        float x = event.getRawX();
+//                        float y = event.getRawY();
+                float x = view.getX()+event.getX();
+                float y = view.getY()+event.getY();
                 float pressure = event.getPressure();
                 float orientation = event.getOrientation();
                 float siz = event.getSize();
@@ -154,10 +161,12 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
-                        toast = Toast.makeText(context, "Down: "+numberOfPoints, Toast.LENGTH_SHORT);
+                        uniqueID+=1;
+                        myRef.child("uniqueID").setValue(uniqueID);
+                        //toast = Toast.makeText(context, "Down: "+numberOfPoints, Toast.LENGTH_SHORT);
 
-                        if (s!=null)
-                            myRef.child("_"+uniqueID).setValue(s);
+//                                if (s!=null)
+//                                    myRef.child("_"+uniqueID).setValue(s);
                         s = new swipe();
                         s.coordinates = new ArrayList<point>();
                         s.height = displayMetrics.heightPixels;
@@ -165,34 +174,93 @@ public class MainActivity extends AppCompatActivity {
                         s.xdpi = displayMetrics.xdpi;
                         s.start = new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, System.currentTimeMillis()/1000);
                         s.hand = hand;
-                        uniqueID+=1;
-                        myRef.child("uniqueID").setValue(uniqueID+1);
-                        toast.setText("Down");
+
+                        //toast.setText("Down");
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        toast = Toast.makeText(context, "Move: "+numberOfPoints, Toast.LENGTH_SHORT);
+                        //toast = Toast.makeText(context, "Move: "+numberOfPoints, Toast.LENGTH_SHORT);
 
-//                        int historySize = event.getHistorySize();
-//                        for (int h=0; h<historySize; h++) {
-//                            s.coordinates.add(new point(view.getX()+event.getHistoricalX(h),view.getY()+event.getHistoricalY(h), event.getHistoricalPressure(h), event.getHistoricalOrientation(h), event.getHistoricalSize(h), event.getHistoricalTouchMajor(h), event.getHistoricalTouchMinor(h), event.getHistoricalEventTime(h)));
-//                        }
+                        int historySize = event.getHistorySize();
+                        for (int h=0; h<historySize; h++) {
+                            s.coordinates.add(new point(view.getX()+event.getHistoricalX(h),view.getY()+event.getHistoricalY(h), event.getHistoricalPressure(h), event.getHistoricalOrientation(h), event.getHistoricalSize(h), event.getHistoricalTouchMajor(h), event.getHistoricalTouchMinor(h), event.getHistoricalEventTime(h)));
+                        }
                         s.coordinates.add(new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, System.currentTimeMillis()/1000));
-                        toast.setText("Move");
+                        //toast.setText("Move");
                         break;
                     case MotionEvent.ACTION_CANCEL:
                     case MotionEvent.ACTION_UP:
-                        toast = Toast.makeText(context, "Up: "+numberOfPoints, Toast.LENGTH_SHORT);
+                        //toast = Toast.makeText(context, "Up: "+numberOfPoints, Toast.LENGTH_SHORT);
 
                         s.coordinates.add(new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, System.currentTimeMillis()/1000));
-                        //myRef.child("_"+uniqueID).setValue(s);
-                        toast.setText("Up");
+
+                        AsyncTaskRunner runner = new AsyncTaskRunner();
+                        runner.execute(s);
+
+                        //toast.setText("Up");
                         break;
                 }
 
                 //toast.show();
-
                 return true;
+
+
             }
         };
+    }
+
+    private class AsyncTaskRunner extends AsyncTask<swipe, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(swipe... swipes) {
+
+            swipe t = swipes[0];
+            myRef.child("_"+uniqueID).setValue(t);
+            point start = s.start;
+            point end = s.coordinates.get(s.coordinates.size()-1);
+            if (start.y < end.y)
+            {
+                if (end.x < start.x)
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                if (end.x < start.x)
+                    return false;
+                else
+                    return true;
+            }
+
+        }
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result == true) {
+                if (textView.getText() == "Left Hand") {
+                    ArrayList<View> views = new ArrayList<View>();
+                    for(int x = 0; x < group.getChildCount(); x++) {
+                        views.add(group.getChildAt(x));
+                    }
+                    group.removeAllViews();
+                    for(int x = views.size() - 1; x >= 0; x--) {
+                        group.addView(views.get(x));
+                    }
+                }
+                textView.setText("Right Hand");
+            }
+            else {
+                if (textView.getText() == "Right Hand") {
+                    ArrayList<View> views = new ArrayList<View>();
+                    for(int x = 0; x < group.getChildCount(); x++) {
+                        views.add(group.getChildAt(x));
+                    }
+                    group.removeAllViews();
+                    for(int x = views.size() - 1; x >= 0; x--) {
+                        group.addView(views.get(x));
+                    }
+                }
+                textView.setText("Left Hand");
+            }
+        }
     }
 }
