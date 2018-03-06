@@ -7,60 +7,71 @@
     android:orientation="vertical"
     tools:context="com.kritinelavelli.longtextapplication.MainActivity">
 
-    <RadioGroup
-        android:id="@+id/group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="top"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:paddingRight="15dp">
+    <!--<RadioGroup-->
+        <!--android:id="@+id/group"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:gravity="top"-->
+        <!--android:paddingLeft="15dp"-->
+        <!--android:paddingTop="15dp"-->
+        <!--android:paddingRight="15dp">-->
 
-    <RadioButton
-        android:id="@+id/leftThumb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Left Thumb"
-        android:onClick="onRadioButtonClicked"/>
-    <RadioButton
-        android:id="@+id/leftIndex"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Left Index"
-        android:onClick="onRadioButtonClicked"/>
+    <!--<RadioButton-->
+        <!--android:id="@+id/leftThumb"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="Left Thumb"-->
+        <!--android:onClick="onRadioButtonClicked"/>-->
+    <!--<RadioButton-->
+        <!--android:id="@+id/leftIndex"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="Left Index"-->
+        <!--android:onClick="onRadioButtonClicked"/>-->
 
-    <RadioButton
-        android:id="@+id/rightThumb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:checked="true"
-        android:onClick="onRadioButtonClicked"
-        android:text="Right Thumb" />
+    <!--<RadioButton-->
+        <!--android:id="@+id/rightThumb"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:checked="true"-->
+        <!--android:onClick="onRadioButtonClicked"-->
+        <!--android:text="Right Thumb" />-->
 
-    <RadioButton
-        android:id="@+id/rightIndex"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Right Index"
-        android:onClick="onRadioButtonClicked"/>
-    </RadioGroup>
+    <!--<RadioButton-->
+        <!--android:id="@+id/rightIndex"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="Right Index"-->
+        <!--android:onClick="onRadioButtonClicked"/>-->
+    <!--</RadioGroup>-->
     <TextView
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/hand"
         android:textSize="22sp" />
-    <ListView
-        android:id="@+id/listviewID"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
 
-         />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
+
+
+
+    <!--<ListView-->
+        <!--android:id="@+id/listviewID"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+
+         <!--/>-->
 
     <!--<ScrollView-->
         <!--android:id="@+id/scroll"-->

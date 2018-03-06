@@ -6,12 +6,15 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,11 +25,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
 
+    public static boolean side = true;
     public String hand = "rightThumb";
     String[] nameArray = {"Octopus","Pig","Sheep","Rabbit","Snake","Spider","Octopus","Pig","Sheep","Rabbit","Snake","Spider"
             ,"Octopus","Pig","Sheep","Rabbit","Snake","Spider","Octopus","Pig","Sheep","Rabbit","Snake","Spider",
@@ -173,9 +178,13 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference myRef;
     int uniqueID;
 
-    RadioGroup group;
-    ListView listView;
+    //RadioGroup group;
+    //ListView listView;
     //private View scrollView;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+
     private TextView textView;
     private int numberOfPoints;
     Toast toast;
@@ -185,17 +194,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CustomListAdapter whatever = new CustomListAdapter(this, nameArray, infoArray);
+        //CustomListAdapter whatever = new CustomListAdapter(this, nameArray, infoArray);
 
         //View layout = (LinearLayout)findViewById(R.id.linearLayoutID);
-        listView = findViewById(R.id.listviewID);
-        listView.setAdapter(whatever);
+//        listView = findViewById(R.id.listviewID);
+//        listView.setAdapter(whatever);
+
+        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        List<String> input = Arrays.asList(nameArray);
+        List<String> k = Arrays.asList(infoArray);
+
+        mAdapter = new MyAdapter(input, k);
+        recyclerView.setAdapter(mAdapter);
 
         //scrollView = findViewById(R.id.scroll);
-        group = findViewById(R.id.group);
+        //group = findViewById(R.id.group);
         textView = findViewById(R.id.indicator);
         //scrollView.setOnTouchListener(myOnTouchListener());
-        listView.setOnTouchListener(myOnTouchListener());
+//        listView.setOnTouchListener(myOnTouchListener());
+        recyclerView.setOnTouchListener(myOnTouchListener());
 
         Context context = getApplicationContext();
         CharSequence text = "Hello toast!";
@@ -234,24 +254,24 @@ public class MainActivity extends AppCompatActivity {
         boolean checked = ((RadioButton) view).isChecked();
 
         // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.leftThumb:
-                if (checked)
-                    hand = "leftThumb";
-                break;
-            case R.id.rightThumb:
-                if (checked)
-                    hand = "rightThumb";
-                break;
-            case R.id.leftIndex:
-                if (checked)
-                    hand = "leftIndex";
-                break;
-            case R.id.rightIndex:
-                if (checked)
-                    hand = "rightIndex";
-                break;
-        }
+//        switch(view.getId()) {
+//            case R.id.leftThumb:
+//                if (checked)
+//                    hand = "leftThumb";
+//                break;
+//            case R.id.rightThumb:
+//                if (checked)
+//                    hand = "rightThumb";
+//                break;
+//            case R.id.leftIndex:
+//                if (checked)
+//                    hand = "leftIndex";
+//                break;
+//            case R.id.rightIndex:
+//                if (checked)
+//                    hand = "rightIndex";
+//                break;
+//        }
     }
 
 
@@ -288,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
                         s.height = displayMetrics.heightPixels;
                         s.width = displayMetrics.widthPixels;
                         s.xdpi = displayMetrics.xdpi;
-                        s.start = new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, System.currentTimeMillis()/1000);
+                        s.start = new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, event.getEventTime());
                         s.hand = hand;
 
                         //toast.setText("Down");
@@ -300,14 +320,14 @@ public class MainActivity extends AppCompatActivity {
                         for (int h=0; h<historySize; h++) {
                             s.coordinates.add(new point(view.getX()+event.getHistoricalX(h),view.getY()+event.getHistoricalY(h), event.getHistoricalPressure(h), event.getHistoricalOrientation(h), event.getHistoricalSize(h), event.getHistoricalTouchMajor(h), event.getHistoricalTouchMinor(h), event.getHistoricalEventTime(h)));
                         }
-                        s.coordinates.add(new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, System.currentTimeMillis()/1000));
+                        s.coordinates.add(new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, event.getEventTime()));
                         //toast.setText("Move");
                         break;
                     case MotionEvent.ACTION_CANCEL:
                     case MotionEvent.ACTION_UP:
                         //toast = Toast.makeText(context, "Up: "+numberOfPoints, Toast.LENGTH_SHORT);
 
-                        s.coordinates.add(new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, System.currentTimeMillis()/1000));
+                        s.coordinates.add(new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, event.getEventTime()));
 
                         AsyncTaskRunner runner = new AsyncTaskRunner();
                         runner.execute(s);
@@ -330,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
         protected Boolean doInBackground(swipe... swipes) {
 
             swipe t = swipes[0];
-            myRef.child("_"+uniqueID).setValue(t);
+            //myRef.child("_"+uniqueID).setValue(t);
             point start = s.start;
             point end = s.coordinates.get(s.coordinates.size()-1);
             if (start.y < end.y)
@@ -352,28 +372,35 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean result) {
             if (result == true) {
-                if (textView.getText() == "Left Hand") {
-                    ArrayList<View> views = new ArrayList<View>();
-                    for(int x = 0; x < group.getChildCount(); x++) {
-                        views.add(group.getChildAt(x));
-                    }
-                    group.removeAllViews();
-                    for(int x = views.size() - 1; x >= 0; x--) {
-                        group.addView(views.get(x));
-                    }
+                if (side == false) { //if left mode on
+
+                    //recyclerView.setAdapter(mAdapter);
+                    side = true;
+//                    ArrayList<View> views = new ArrayList<View>();
+//                    for(int x = 0; x < group.getChildCount(); x++) {
+//                        views.add(group.getChildAt(x));
+//                    }
+//                    group.removeAllViews();
+//                    for(int x = views.size() - 1; x >= 0; x--) {
+//                        group.addView(views.get(x));
+//                    }
                 }
                 textView.setText("Right Hand");
             }
             else {
-                if (textView.getText() == "Right Hand") {
-                    ArrayList<View> views = new ArrayList<View>();
-                    for(int x = 0; x < group.getChildCount(); x++) {
-                        views.add(group.getChildAt(x));
-                    }
-                    group.removeAllViews();
-                    for(int x = views.size() - 1; x >= 0; x--) {
-                        group.addView(views.get(x));
-                    }
+                if (side == true) {     //if right mode on (side = true means has to switch to right hand mode)
+
+                    //recyclerView.setAdapter(nAdapter);
+                    side = false;
+//                    ArrayList<View> views = new ArrayList<View>();
+//
+//                    for(int x = 0; x < group.getChildCount(); x++) {
+//                        views.add(group.getChildAt(x));
+//                    }
+//                    group.removeAllViews();
+//                    for(int x = views.size() - 1; x >= 0; x--) {
+//                        group.addView(views.get(x));
+//                    }
                 }
                 textView.setText("Left Hand");
             }
