@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LongTextApplication</string>
+    <string name="app_name">Scroll Data Application</string>
     <string name="last_question">
         <b>"The Last Question\n\n"</b>
         "The last question was asked for the first time, half in jest, on May 21, 2061, at a time"
