@@ -353,21 +353,22 @@ public class MainActivity extends AppCompatActivity {
             //myRef.child("_"+uniqueID).setValue(t);
             point start = s.start;
             point end = s.coordinates.get(s.coordinates.size()-1);
-            if (start.y < end.y)
-            {
-                if (end.x < start.x)
-                    return true;
-                else
-                    return false;
-            }
-            else
-            {
-                if (end.x < start.x)
-                    return false;
-                else
-                    return true;
-            }
 
+            if (start.y < end.y && Math.abs(start.y - end.y)>100)
+            {
+                if (end.x < start.x)
+                    return true;
+                else
+                    return false;
+            }
+            else if (start.y > end.y && Math.abs(start.y - end.y)>100)
+            {
+                if (end.x < start.x)
+                    return false;
+                else
+                    return true;
+            }
+            return side;
         }
         @Override
         protected void onPostExecute(Boolean result) {
