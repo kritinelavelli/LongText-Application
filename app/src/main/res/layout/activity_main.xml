@@ -49,12 +49,12 @@
         android:text="Right Index"
         android:onClick="onRadioButtonClicked"/>
     </RadioGroup>
-    <TextView
-        android:id="@+id/indicator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="22sp" />
+    <!--<TextView-->
+        <!--android:id="@+id/indicator"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/app_name"-->
+        <!--android:textSize="22sp" />-->
 
     <ScrollView
         android:id="@+id/scroll"

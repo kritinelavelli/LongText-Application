@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     RadioGroup group;
     private View scrollView;
-    private TextView textView;
+    //private TextView textView;
     private int numberOfPoints;
     Toast toast;
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         scrollView = findViewById(R.id.scroll);
         group = findViewById(R.id.group);
-        textView = findViewById(R.id.indicator);
+        //textView = findViewById(R.id.indicator);
         scrollView.setOnTouchListener(myOnTouchListener());
 
         Context context = getApplicationContext();
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                         s.height = displayMetrics.heightPixels;
                         s.width = displayMetrics.widthPixels;
                         s.xdpi = displayMetrics.xdpi;
-                        s.start = new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, System.currentTimeMillis()/1000);
+                        s.start = new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, event.getEventTime());
                         s.hand = hand;
 
                         //toast.setText("Down");
@@ -184,14 +184,14 @@ public class MainActivity extends AppCompatActivity {
                         for (int h=0; h<historySize; h++) {
                             s.coordinates.add(new point(view.getX()+event.getHistoricalX(h),view.getY()+event.getHistoricalY(h), event.getHistoricalPressure(h), event.getHistoricalOrientation(h), event.getHistoricalSize(h), event.getHistoricalTouchMajor(h), event.getHistoricalTouchMinor(h), event.getHistoricalEventTime(h)));
                         }
-                        s.coordinates.add(new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, System.currentTimeMillis()/1000));
+                        s.coordinates.add(new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, event.getEventTime()));
                         //toast.setText("Move");
                         break;
                     case MotionEvent.ACTION_CANCEL:
                     case MotionEvent.ACTION_UP:
                         //toast = Toast.makeText(context, "Up: "+numberOfPoints, Toast.LENGTH_SHORT);
 
-                        s.coordinates.add(new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, System.currentTimeMillis()/1000));
+                        s.coordinates.add(new point(x,y, pressure, orientation, siz, touchMajor, touchMinor, event.getEventTime()));
 
                         AsyncTaskRunner runner = new AsyncTaskRunner();
                         runner.execute(s);
@@ -215,52 +215,53 @@ public class MainActivity extends AppCompatActivity {
 
             swipe t = swipes[0];
             myRef.child("_"+uniqueID).setValue(t);
-            point start = s.start;
-            point end = s.coordinates.get(s.coordinates.size()-1);
-            if (start.y < end.y)
-            {
-                if (end.x < start.x)
-                    return true;
-                else
-                    return false;
-            }
-            else
-            {
-                if (end.x < start.x)
-                    return false;
-                else
-                    return true;
-            }
+//            point start = s.start;
+//            point end = s.coordinates.get(s.coordinates.size()-1);
+//            if (start.y < end.y)
+//            {
+//                if (end.x < start.x)
+//                    return true;
+//                else
+//                    return false;
+//            }
+//            else
+//            {
+//                if (end.x < start.x)
+//                    return false;
+//                else
+//                    return true;
+//            }
+            return true;
 
         }
         @Override
         protected void onPostExecute(Boolean result) {
-            if (result == true) {
-                if (textView.getText() == "Left Hand") {
-                    ArrayList<View> views = new ArrayList<View>();
-                    for(int x = 0; x < group.getChildCount(); x++) {
-                        views.add(group.getChildAt(x));
-                    }
-                    group.removeAllViews();
-                    for(int x = views.size() - 1; x >= 0; x--) {
-                        group.addView(views.get(x));
-                    }
-                }
-                textView.setText("Right Hand");
-            }
-            else {
-                if (textView.getText() == "Right Hand") {
-                    ArrayList<View> views = new ArrayList<View>();
-                    for(int x = 0; x < group.getChildCount(); x++) {
-                        views.add(group.getChildAt(x));
-                    }
-                    group.removeAllViews();
-                    for(int x = views.size() - 1; x >= 0; x--) {
-                        group.addView(views.get(x));
-                    }
-                }
-                textView.setText("Left Hand");
-            }
+//            if (result == true) {
+//                if (textView.getText() == "Left Hand") {
+//                    ArrayList<View> views = new ArrayList<View>();
+//                    for(int x = 0; x < group.getChildCount(); x++) {
+//                        views.add(group.getChildAt(x));
+//                    }
+//                    group.removeAllViews();
+//                    for(int x = views.size() - 1; x >= 0; x--) {
+//                        group.addView(views.get(x));
+//                    }
+//                }
+//                textView.setText("Right Hand");
+//            }
+//            else {
+//                if (textView.getText() == "Right Hand") {
+//                    ArrayList<View> views = new ArrayList<View>();
+//                    for(int x = 0; x < group.getChildCount(); x++) {
+//                        views.add(group.getChildAt(x));
+//                    }
+//                    group.removeAllViews();
+//                    for(int x = views.size() - 1; x >= 0; x--) {
+//                        group.addView(views.get(x));
+//                    }
+//                }
+//                textView.setText("Left Hand");
+//            }
         }
     }
 }
